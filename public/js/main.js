@@ -1,5 +1,7 @@
 angular.module('projetopi',['ngRoute', 'ngResource'])
-  .config(function($routeProvider) {
+  .config(function($routeProvider, $httpProvider) {
+
+    $httpProvider.interceptors.push('meuInterceptor');
 
     $routeProvider.when('/pets', {
       templateUrl: 'partials/pets.html',
@@ -24,6 +26,10 @@ angular.module('projetopi',['ngRoute', 'ngResource'])
     $routeProvider.when('/pet/foto', {
       templateUrl: '../vendor/file-reader/foto.html',
       //controller: 'PetDetailsController'
+    });
+
+    $routeProvider.when('/auth', {
+      templateUrl: 'partials/auth.html'
     });
 
     $routeProvider.otherwise({redirectTo: '/pets'});
