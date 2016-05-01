@@ -1,27 +1,41 @@
 language: node_js
 node_js:
-  - 0.10
+- 0.1
 notifications:
-  - maykon.meneses@gmail.com
+- maykon.meneses@gmail.com
 services:
-  - mongodb
+- mongodb
 env:
   global:
-    - NODE_ENV: test
+  - NODE_ENV: test
 addons:
   sauce_connect: true
 before_install:
-  - npm install -g bower@1.3
-  - npm install -g grunt-cli@0.1
-  - npm install -g karma-cli@0.0
-  - npm install -g protractor@1.5
-  - webdriver-manager update  
-  - bower install
+- npm install -g bower@1.3
+- npm install -g grunt-cli@0.1
+- npm install -g karma-cli@0.0
+- npm install -g protractor@1.5
+- webdriver-manager update
+- bower install
 before_script:
-  - node test/data.js
-  - grunt
-  - cd dist
+- node test/data.js
+- grunt minifica
 script:
- - karma start config/karma.config.js --single-run --browsers PhantomJS
- - node server &
- - protractor config/protractor.js
+- karma start config/karma.config.js --single-run --browsers PhantomJS
+- node server &
+- protractor config/protractor.js
+before_deploy:
+  - git config --global user.email 'travis@travis-ci.com'
+  - git config --global user.name 'Travis CI'
+  - git checkout $TRAVIS_BRANCH
+  - git add --all
+  - git commit -am "Travis commit"
+deploy:
+  provider: openshift
+  user: maykon.meneses@gmail.com
+  password:
+    secure: uSgxpsi+GItqfo27kh2jGQJcvOQXfgvUpo9pST48WXigQYxhp9KnckcYtaXxCH3M51P8n5kIY3Mtm5FKG6JJ/bbLRu7Ljf4SM6wQJ11hUDvwmmqABPj0lLgpmxW3e+MUlYKdR9GmHkMJ8oPC1WZrzpedpFC4O5BnJDfbsRfW7Wvd2eyzE/mvAFbzGxgRsiDLpr+/42vPD7AWW6srdz5ntEJCAeRETpJYR4SWx5RpQM4R/D+toiwGNT04gDDzzkTljhoRp214A0Xo7vCUc6mdX7qHLnH8IXMEn7jQBn+EgK6cFcZafNbk5ZsHjkF/O714IT2VzuD6YCg44eMXxNjcfXVyTcCjS16Hvj2hY0B24AqN5HkmzLLaT9glCTKSzRGciwCceoLWff5Z1xtjL6pp6GSK2JoQHsJZFFHPIEp5CE4UuzPrOzcr2VmPq7E2FMvt23NDDvBOCns6VPkYfHFajBScZZdTyQ53VsFAq8TbQGxoZgPNfsaKFn++eB9n+dbnLJBEk2dFwmlYhDm77tQ7DfQ4nwEloxBkp3cql0ZVP4x3/1ceyECWaoRGqI24nOuyGpxwORIzYmtOSFrFOe7j8uv+/aeqw06G5VosX94asE+h8oIEd+tNRdGfmKdDhcio94rqedscCp24wIoK7eouP9QfoiqGdG415jBnbRzw/9w=
+  app: meowpet
+  domain: projetopi
+  on:
+    repo: maykonmenezes/meowpet
